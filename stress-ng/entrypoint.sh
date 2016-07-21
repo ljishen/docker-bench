@@ -69,15 +69,15 @@ for bench in $BENCHMARKS ; do
     done
   elif [[ $bench == "class_cpu" ]] ; then
     include_comma
-    stress-ng --class cpu --exclude matrix,context --sequential $COMMON &> /dev/null
+    stress-ng --class cpu --exclude matrix,context,atomic --sequential $COMMON &> /dev/null
     /postprocess.py cpu
   elif [[ $bench == "class_memory" ]] ; then
     include_comma
-    stress-ng --class memory --exclude bsearch,hsearch,lsearch,qsort,wcs,tsearch,stream,numa --sequential $COMMON &> /dev/null
+    stress-ng --class memory --exclude bsearch,hsearch,lsearch,qsort,wcs,tsearch,stream,numa,atomic,str --sequential $COMMON &> /dev/null
     /postprocess.py memory
   elif [[ $bench == "class_cpu-cache" ]] ; then
     include_comma
-    stress-ng --class cpu-cache --exclude bsearch,hsearch,lsearchmatrix,qsort,malloc,str,stream,memcpy,wcs,tsearch --sequential $COMMON &> /dev/null
+    stress-ng --class cpu-cache --exclude bsearch,hsearch,lsearch,matrix,qsort,malloc,str,stream,memcpy,wcs,tsearch,af-alg,cpu,crypt,longjmp,numa,opcode,qsort,vecmath --sequential $COMMON &> /dev/null
     /postprocess.py cpu-cache
   else
     # if we didn't get "special" id, then we assume it's a regular stressor
