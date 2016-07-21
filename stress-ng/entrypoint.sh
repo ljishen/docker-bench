@@ -77,7 +77,7 @@ for bench in $BENCHMARKS ; do
     /postprocess.py memory
   elif [[ $bench == "class_cpu-cache" ]] ; then
     include_comma
-    stress-ng --class cpu-cache --exclude bsearch,hsearch,lsearch,matrix,qsort,malloc,str,stream,memcpy,wcs,tsearch,af-alg,cpu,crypt,longjmp,numa,opcode,qsort,vecmath --sequential $COMMON &> /dev/null
+    stress-ng --class cpu-cache --exclude bsearch,hsearch,lsearch,matrix,qsort,malloc,str,stream,memcpy,wcs,tsearch,af-alg,cpu,crypt,longjmp,numa,opcode,qsort,vecmath,lockbus --sequential $COMMON &> /dev/null
     /postprocess.py cpu-cache
   else
     # if we didn't get "special" id, then we assume it's a regular stressor
