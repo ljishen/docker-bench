@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ -z "$BENCHMARKS" ] ; then
-  BENCHMARKS="cpu-methods cpu-class cpu-cache memory matrix-methods string-methods"
+  BENCHMARKS="cpu-methods matrix-methods string-methods class_cpu class_cpu-cache class_memory"
 fi
 
 if [ -z $NUM_WORKERS ] ; then
@@ -41,7 +41,7 @@ echo "["
 for bench in $BENCHMARKS ; do
   if [[ $bench == "cpu-methods" ]] ; then
     include_comma
-    for method in ackermann bitops callfunc cdouble cfloat clongdouble correlate crc16 decimal32 decimal64 decimal128 dither djb2a double euler explog fft fibonacci float fnv1a gamma gcd gray hamming hanoi hyperbolic idct int128 int64 int32 int16 int8 int128float int128double int128longdouble int128decimal32 int128decimal64 int128decimal128 int64float int64double int64longdouble int32float int32double int32longdouble jenkin jmp ln2 longdouble loop matrixprod nsqrt omega parity phi pi pjw prime psi queens rand rand48 rgb sdbm sieve sqrt trig union zeta ; do
+    for method in ackermann bitops callfunc cdouble cfloat clongdouble correlate crc16 dither djb2a double euler explog fft fibonacci float fnv1a gamma gcd gray hamming hanoi hyperbolic idct int128 int64 int32 int16 int8 int128float int128double int128longdouble int64float int64double int64longdouble int32float int32double int32longdouble jenkin jmp ln2 longdouble loop matrixprod nsqrt omega parity phi pi pjw prime psi queens rand rand48 rgb sdbm sieve sqrt trig union zeta ; do
        stress-ng --cpu-method $method --cpu $COMMON &> /dev/null
        /postprocess.py cpu $method
        if [ "$method" != "zeta" ] ; then
@@ -51,7 +51,7 @@ for bench in $BENCHMARKS ; do
     done
   elif [[ $bench == "matrix-methods" ]] ; then
     include_comma
-    for method in add div frobenius mult prod sub hadamard trans ; do
+    for method in add copy div frobenius hadamard mean mult prod sub trans ; do
        stress-ng --matrix-method $method --matrix $COMMON &> /dev/null
        /postprocess.py matrix $method
        if [ "$method" != "trans" ] ; then
@@ -67,17 +67,17 @@ for bench in $BENCHMARKS ; do
          echo ","
        fi
     done
-  elif [[ $bench == "cpu-class" ]] ; then
+  elif [[ $bench == "class_cpu" ]] ; then
     include_comma
     stress-ng --class cpu --exclude matrix,context --sequential $COMMON &> /dev/null
     /postprocess.py cpu
-  elif [[ $bench == "memory" ]] ; then
+  elif [[ $bench == "class_memory" ]] ; then
     include_comma
     stress-ng --class memory --exclude bsearch,hsearch,lsearch,qsort,wcs,tsearch,stream,numa --sequential $COMMON &> /dev/null
     /postprocess.py memory
-  elif [[ $bench == "cpu-cache" ]] ; then
+  elif [[ $bench == "class_cpu-cache" ]] ; then
     include_comma
-    stress-ng --class cpu-cache --exclude bsearch,hsearch,lockbus,lsearch,vecmath,matrix,qsort,malloc,str,stream,memcpy,wcs,tsearch --sequential $COMMON &> /dev/null
+    stress-ng --class cpu-cache --exclude bsearch,hsearch,lsearchmatrix,qsort,malloc,str,stream,memcpy,wcs,tsearch --sequential $COMMON &> /dev/null
     /postprocess.py cpu-cache
   else
     # if we didn't get "special" id, then we assume it's a regular stressor
