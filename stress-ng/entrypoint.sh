@@ -41,7 +41,7 @@ echo "["
 for bench in $BENCHMARKS ; do
   if [[ $bench == "cpu-methods" ]] ; then
     include_comma
-    for method in ackermann bitops callfunc cdouble cfloat clongdouble correlate crc16 dither djb2a double euler explog fft fibonacci float fnv1a gamma gcd gray hamming hanoi hyperbolic idct int128 int64 int32 int16 int8 int128float int128double int128longdouble int64float int64double int64longdouble int32float int32double int32longdouble jenkin jmp ln2 longdouble loop matrixprod nsqrt omega parity phi pi pjw prime psi queens rand rand48 rgb sdbm sieve sqrt trig union zeta ; do
+    for method in all ackermann bitops callfunc cdouble cfloat clongdouble correlate crc16 decimal32 decimal64 decimal128 dither djb2a double euler explog fft fibonacci float fnv1a gamma gcd gray hamming hanoi hyperbolic idct int128 int64 int32 int16 int8 int128float int128double int128longdouble int128decimal32 int128decimal64 int128decimal128 int64float int64double int64longdouble int32float int32double int32longdouble jenkin jmp ln2 longdouble loop matrixprod nsqrt omega parity phi pi pjw prime psi queens rand rand48 rgb sdbm sieve sqrt trig union zeta ; do
        stress-ng --cpu-method $method --cpu $COMMON &> /dev/null
        /postprocess.py cpu $method
        if [ "$method" != "zeta" ] ; then
@@ -69,15 +69,15 @@ for bench in $BENCHMARKS ; do
     done
   elif [[ $bench == "class_cpu" ]] ; then
     include_comma
-    stress-ng --class cpu --exclude matrix,context,atomic --sequential $COMMON &> /dev/null
+    stress-ng --class cpu --sequential $COMMON &> /dev/null
     /postprocess.py cpu
   elif [[ $bench == "class_memory" ]] ; then
     include_comma
-    stress-ng --class memory --exclude bsearch,hsearch,lsearch,qsort,wcs,tsearch,stream,numa,atomic,str --sequential $COMMON &> /dev/null
+    stress-ng --class memory --exclude atomic,bsearch,context,hsearch,lsearch,matrix,numa,qsort,str,stream,tsearch,wcs,lockbus,malloc,memcpy --sequential $COMMON &> /dev/null
     /postprocess.py memory
   elif [[ $bench == "class_cpu-cache" ]] ; then
     include_comma
-    stress-ng --class cpu-cache --exclude bsearch,hsearch,lsearch,matrix,qsort,malloc,str,stream,memcpy,wcs,tsearch,af-alg,cpu,crypt,longjmp,numa,opcode,qsort,vecmath,lockbus --sequential $COMMON &> /dev/null
+    stress-ng --class cpu-cache --exclude bsearch,hsearch,lsearch,matrix,qsort,str,stream,tsearch,vecmath,wcs --sequential $COMMON &> /dev/null
     /postprocess.py cpu-cache
   else
     # if we didn't get "special" id, then we assume it's a regular stressor
