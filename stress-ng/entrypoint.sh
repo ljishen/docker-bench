@@ -73,7 +73,7 @@ for bench in $BENCHMARKS ; do
     /postprocess.py cpu
   elif [[ $bench == "class_memory" ]] ; then
     include_comma
-    stress-ng --class memory --exclude atomic,bsearch,context,hsearch,lsearch,matrix,numa,qsort,str,stream,tsearch,wcs,lockbus,malloc,memcpy --sequential $COMMON &> /dev/null
+    stress-ng --class memory --exclude atomic,bsearch,context,hsearch,lsearch,matrix,numa,qsort,str,stream,tsearch,wcs,malloc,memcpy,cache,lockbus --sequential $COMMON &> /dev/null
     /postprocess.py memory
   elif [[ $bench == "class_cpu-cache" ]] ; then
     include_comma
